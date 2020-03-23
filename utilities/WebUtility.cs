@@ -16,14 +16,10 @@ namespace utilities
             //
             // Performas basic error handling and then downloads string for URI
 
-            if (string.IsNullOrEmpty(address.ToString())) throw new NullReferenceException("Supplied Uri is empty");
-
-            if (!address.IsWellFormedOriginalString()) throw new ArgumentException("Uri is not well formed");
-
-            string response;
+            if (!IsValidUri(address)) throw new ArgumentException("Invalid URI");
 
             using HttpClient httpClient = new HttpClient();
-            response = await httpClient.GetStringAsync(address.ToString());
+            string response = await httpClient.GetStringAsync(address.ToString());
 
             return response;
         }
@@ -33,12 +29,25 @@ namespace utilities
             //
             // Perfroms basic error handling, and then downloads file from URI
 
-            if (string.IsNullOrEmpty(address.ToString())) throw new NullReferenceException("Supplied Uri is null");
-
-            if (!address.IsWellFormedOriginalString()) throw new ArgumentException("Uri is not well formed");
+            if (!IsValidUri(address)) throw new ArgumentException("Invalid URI");
 
             using WebClient httpClient = new WebClient();
             httpClient.DownloadFileAsync(address, fileName);
+        }
+
+        public static bool IsValidUri(Uri address)
+        {
+            // Summary
+            //
+            // Validates supplied Web Address is valid
+
+            // Validate not null
+            if (string.IsNullOrEmpty(address.ToString())) return false;
+
+            // Is well formed
+            if (!address.IsWellFormedOriginalString()) return false;
+
+            return true;
         }
     }
 }
