@@ -31,6 +31,8 @@ namespace utilities
 
             if (!IsValidUri(address)) throw new ArgumentException("Invalid URI");
 
+            if (!address.IsFile) throw new ArgumentException("Supplied URI is not a file");
+
             using WebClient httpClient = new WebClient();
             httpClient.DownloadFileAsync(address, fileName);
         }
