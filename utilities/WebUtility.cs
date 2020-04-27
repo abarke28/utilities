@@ -23,6 +23,7 @@ namespace utilities
 
             return response;
         }
+
         public static void DownloadFileAsync(Uri address, string fileName)
         {
             // Summary
