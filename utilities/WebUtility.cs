@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -34,8 +35,8 @@ namespace utilities
 
             if (!address.IsFile) throw new ArgumentException("Supplied URI is not a file");
 
-            using WebClient httpClient = new WebClient();
-            httpClient.DownloadFileAsync(address, fileName);
+            using WebClient webClient = new WebClient();
+            webClient.DownloadFileAsync(address, fileName);
         }
 
         public static bool IsValidUri(Uri address)
@@ -51,6 +52,37 @@ namespace utilities
             if (!address.IsWellFormedOriginalString()) return false;
 
             return true;
+        }
+
+        public static Task<HttpResponseMessage> PostAsync(this HttpClient http, string requestUri, object content)
+        {
+            /// <summary>
+            /// Extension: Send a POST request to the specified Uri as an asynchronous operation.
+            /// Content is serialized as Json with UTF8 encoding.
+            /// </summary>
+            /// <param name="requestUri">The Uri the request is sent to.</param>
+
+            var objectJson = JsonConvert.SerializeObject(content);
+            var contentStr = new StringContent(objectJson, Encoding.UTF8, "application/json");
+
+            return http.PostAsync(requestUri, contentStr);
+        }
+
+        public static Task<HttpResponseMessage> PutAsync(this HttpClient http, string requestUri, object content)
+        {
+            /// <summary>
+            /// Extension: Send a PUT request to teh specified Uri as an asynchronous operation.
+            /// Content is serialized as Json with UTF8 encoding.
+            /// </summary>
+            /// <param name="http"></param>
+            /// <param name="requestUri"></param>
+            /// <param name="content"></param>
+            /// <returns></returns>
+
+            var objectJson = JsonConvert.SerializeObject(content);
+            var contentStr = new StringContent(objectJson, Encoding.UTF8, "application/json");
+
+            return http.PutAsync(requestUri, contentStr);
         }
     }
 }
