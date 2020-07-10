@@ -44,5 +44,20 @@ namespace utilities
 
             return result;
         }
+
+        /// <summary>
+        /// Returns an IEnumerable of an integral range
+        /// </summary>
+        /// <param name="start">Integer to start at</param>
+        /// <param name="count">Number of integers to return</param>
+        public static IEnumerable<int> Range(int start, int count)
+        {
+            if (count <= 0) throw new ArgumentException("Count must be at least one.", nameof(count));
+
+            for (int i=start; i<start+count; i++)
+            {
+                yield return i;
+            }
+        }
     }
 }
